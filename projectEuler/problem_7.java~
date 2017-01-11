@@ -1,0 +1,10 @@
+public class problem_7{
+    void problem_7(){
+    }
+    bool checkPrime(int){
+	int i;
+	for(i=
+    void static public main(Strings args[]){
+	long int count=2,n=1,num;
+	while(count!=10){
+	    num=6

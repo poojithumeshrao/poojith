@@ -1,0 +1,13 @@
+public class problem_10{
+    problem_10(){}
+    boolean checkPrime(long a){
+	for(int i=2;i<=a/2;i++)
+	    if(a%i==0)
+		return(false);
+	return(true);
+    }
+    public static void main(String args[]){
+	problem_10 p = new(problem_10);
+	int set[] = new int[10];
+	set[]={2,3,5,7,11,13,17,19,23,29);
+	

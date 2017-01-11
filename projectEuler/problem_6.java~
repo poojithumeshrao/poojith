@@ -1,0 +1,13 @@
+public class problem_6{
+    int static main(argc[]){
+	int a=9;
+	int sum = a+1,tot = 0;
+	while(a!=1){
+	    tot = tot +(a*sum);
+	    sum = sum + a;
+	    a--;
+	}
+	System.out.println(2*tot);
+    }
+}
+	

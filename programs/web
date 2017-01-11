@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="eng-US">
+<html>
+ <head>
+  <title>poojith</title> 
+ </head>
+ <body>
+  <h1>heading</h1>
+  <h2>heading</h2>
+  <h3>heading</h3>
+  <p>
+   hello
+   <br />
+   <strong>poojith</strong> is the <i>boss</i>
+   <div>
+   div is a block element
+   </div>
+   <div>
+    <p>
+     hows this
+    </p>
+    <span>
+     hmmmmmmmmmmmmmmmm
+    </span>
+    lets see where this prints
+   </div>
+   
+</p>
+</body>
+</html>
+

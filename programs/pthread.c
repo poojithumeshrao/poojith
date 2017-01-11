@@ -1,0 +1,36 @@
+#include<pthread.h>
+#include<stdio.h>
+
+int sum;
+void *thread(void *param);
+
+int main(int argc,char *argv[])
+{
+	pthread_t th;
+	pthread_attr_t attr;
+	int temp;
+	if(argc!=2)
+	{
+		printf("enter integer values\n");
+		return -1;
+	}
+	temp = atoi(argv[1]);
+	if(temp < 0)
+	{
+		printf("positive number\n");
+		return -1;
+	}
+	
+	pthread_attr_init(&attr);
+	pthread_create(&th,&attr,thread,argv[1]);
+	pthread_join(th,NULL);
+	printf("sum = %d\n",sum);
+}
+void *thread(void *param)
+{
+	int i, upper = atoi(param);
+	sum =0;
+	for(i=0;i<upper;i++)
+		sum+=i;
+	pthread_exit(0);	
+}

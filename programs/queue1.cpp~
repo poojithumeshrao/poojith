@@ -1,0 +1,52 @@
+//#include<iostream>
+//using namespace std;
+struct queue
+{
+	int ele;
+	queue *next;
+};
+void enqueue(queue*,int);
+void dequeue(queue*);
+int empty(queue*);
+int emptyq();
+void  dequeue(queue *start1)
+{
+	if(start1->next!=NULL)
+	{
+		queue *temp,*p;
+		int a;	
+		temp = start1;
+		while(temp->next!= NULL)
+		{
+			p =temp;
+			temp=temp->next;
+		}
+		a=temp->ele;
+		delete(temp);
+		p->next = NULL;
+		//cout<<a<<endl;
+	}
+	else
+		return;
+	
+}
+void enqueue(queue *start1, int val)
+{
+	queue *temp;
+	temp = new(queue);
+	temp->ele=val;
+	temp->next=start1->next;
+	start1->next=temp;
+}
+int emptyq()
+{
+	
+}
+int empty(queue *a)
+{
+	if(a->next==NULL)
+		return 1;
+	else
+		return 0;
+}
+

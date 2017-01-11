@@ -1,0 +1,70 @@
+#include<iostream>
+using namespace std;
+void heapify_up(int[],int);
+void heapify_down(int[],int);
+int main()
+{
+  int h[50],val,n=0,c,i;
+  while(1)
+    {
+      cout<<"1 to insert"<<endl;
+      cout<<"2 to minimum"<<endl;
+      cout<<"3 to print heap"<<endl;
+      cout<<"4 to exit"<<endl;
+      cin>>c;
+      switch( c)
+	{
+	case 1:
+	  {
+	    cin>>val;
+	    n++;
+	    h[n]=val;
+	    heapify_up(h,n);
+	  }
+	case 2:
+	  {
+	    cout<<h[1]<<"/t";
+	    heapify_down(h,1);
+	    n--;
+	  }
+	case 3:
+	  for(i=0;i<n;i++)
+	    cout<<h[i]<<"/t";
+	case 4:
+	  break;
+	}
+    }
+}
+void heapify_up(int h[],int i)
+{
+  int j,temp;
+  if(i>1)
+    {
+      j=i/2;
+      if(h[j]>h[i])
+	{
+	  temp=h[j];
+	  h[j]=h[i];
+	  h[i]=temp;
+	}
+    }
+}
+void heapify_down(int h[],int i)
+{
+  int j,temp;
+  if(2*i>n)
+    return;
+  else if(2*i<n)  
+    {
+      if(h[2*i]>h[2*i+1])
+	j=2*i+1;
+      else
+	j=2*i;
+    }
+  else 
+    j=2*i;
+  if(h[i]>h[j])
+    {
+      temp=h[j];
+      h[j]=h[i];
+      h[i]=temp;
