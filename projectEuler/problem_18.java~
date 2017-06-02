@@ -1,0 +1,17 @@
+public class problem_18{
+    public static void main(String[] args){
+	int[][] input = new int[20][20];
+	Scanner in = new Scanner(System.in);
+	int i,j;
+	for(i=0;i<14;i++){
+	    for(j=0;j<i+1;j++){
+		input[i][j]=in.nextInt();
+	    }
+	}
+	for(i=0;i<14;i++){
+	    for(j=0;j<i+1;j++){
+		System.out.println(input[i][j]);
+	    }
+	}
+    }
+}

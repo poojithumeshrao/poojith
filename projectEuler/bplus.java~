@@ -1,0 +1,91 @@
+class pair{
+    int value;
+    pair next;
+} 
+class node{
+    pair[] p = new pair[10];
+    node parent,prev; 
+    bool leaf;
+    int size;
+}
+public class bplustree{
+    final int deg = 3;
+    node start = new node();
+    node search(int a){
+	node curNode = this.start;
+	int curVal = curNode.p[0].value;
+	int i=0;
+	while(!cur.leaf && i < size){
+	    if(a<curNode.p[0].value){
+		curNode = curNode.prev;
+		i=0;
+		continue;
+	    }
+	        
+	    else if(a<curNode.p[i].value){
+		curNode = curNode.p[i-1].next;
+		i=0;
+		continue;
+	    }
+	    else if(i==size-1){
+		curNode = curNode.p[i].next;
+		i=0;
+		continue;
+	    }
+	    i++;
+	}
+	if(!curNode.leaf){
+	    System.out.println("error in leaf node");
+	    System.exit(0);
+	}
+	else
+	    return curNode;
+    }
+    void balance(node a){
+	int flag =0;
+	if(a.size<deg){
+	    System.out.println("error in balancing");
+	    return;
+
+	}
+	else{
+	    if(a.parent == null){
+		flag =1;
+		node tempParent = new node();
+		a.parent = tempParent;
+		this.start=tempParent;
+		tempParent.prev = a;
+		tempParent.p[0].value=a.p[a.size/2].value;
+		tempParent.leaf = false;
+		
+	    }
+	    node temp = new node();
+	    if(flag ==1){
+		tempParent.p[0].next=temp;
+	    }
+	    temp.parent = a.parent;
+	    temp.leaf = true;
+	    int i,j;
+	    for(i=a.size/2,j=0;i< size;i++,j++){
+		temp.p[j]=a.p[i];
+	    }
+	    temp.size = a.size-a.size/2;
+	    a.size = a.size/2;
+	}
+    }
+    void insert(node a,int val){
+	int temp,temp2;
+	for(int i=0;i<a.size;i++){
+	    if(a.p[i].value>val)
+		break;
+	}
+	a.p[i].value=val;
+	for(int j= a.size;j>i;j--)
+	    a.p[j].value = a.p[j-1].value;
+    }
+        
+
+        
+    
+        
+}

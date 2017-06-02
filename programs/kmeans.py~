@@ -1,0 +1,76 @@
+import random
+import math
+#import pdb
+
+#pdb.set_trace()
+
+n = input("enter number of groups");
+
+ip = 20;#number of points
+
+#generate random points
+def rndm(point): 
+    point.x = random.randint(0,10);
+    point.y = random.randint(0,10);
+
+
+
+
+class point:
+    nw = 0;
+    old = nw;
+    def dist_frm_cluster(self):
+        for i in range(n):
+            d[i] = sqrt((x - c[i].centroid.x)**2 + (y-c[i].centroid.y)**2)
+        nw = d.index(min(d));#new cluster
+
+class cluster:
+    ps = []
+    centroid = point()
+    sumx = 0
+    sumy = 0
+    def cal_cen(self):
+        if(len(self.ps) != 0):
+            for i in range(len(self.ps)):
+                self.sumx += self.ps[i].x
+                self.sumy += self.ps[i].y
+                self.centroid.x = self.sumx/len(self.ps);
+                self.centroid.y = self.sumy/len(self.ps);
+
+c =[cluster() for i in range(n)];
+
+#generate random centroid
+for i in range(n):
+    
+    c[i].centroid.x = random.randint(0,10);
+    c[i].centroid.y = random.randint(0,10);
+
+for i in range(n):
+    print str(c[i].centroid.x) +',' +str(c[i].centroid.y)
+
+print "------------------------"
+
+#generate random points
+
+p=[point() for i in range(ip)]
+for i in range(ip):
+    rndm(p[i]);
+
+# implementing kmeans
+for count in range(5):
+    for point_count in range(ip):
+        p[i].dist_frm_cluster;
+        if point_count != 0:#for 1st iteration
+            c[p[i].old].ps.remove(p[i]);
+            c[p[i].old].cal_cen();
+        c[p[i].nw].ps.append(p[i]);
+        c[p[i].nw].cal_cen();
+        
+for i in range(ip):
+    print str(p[i].x) +',' +str( p[i].y)
+        
+print "-----------------------------------------"
+
+for i in range(n):
+    print str(c[i].centroid.x) +',' +str(c[i].centroid.y)
+

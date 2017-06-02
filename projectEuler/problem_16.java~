@@ -1,0 +1,23 @@
+public class problem_16{
+    final int n = 10;
+    public static void main(String args[]){	
+	int sum,i,j,temp,carry;
+	i=1;
+	ArrayList num = new ArrayList();
+	num.add(2);
+	while(i<this.n){
+	    j=0;
+	    carry=0;
+	    while(j<=num.size()){
+		temp = num.get(j);
+		temp = temp*2;	
+		temp=temp+carry;
+		carry=temp/10;
+		temp=temp%10;
+		num.add(j,temp);
+		j++;
+	    }
+	    i++;
+	}
+
+	
