@@ -1,0 +1,44 @@
+import nltk
+import string
+
+from collections import Counter
+from nltk.corpus import stopwords
+from nltk.stem.porter import *
+
+strg = []
+with open('bbcsport/cricket/c1.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/cricket/c2.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/cricket/c3.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/tennis/t1.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/tennis/t2.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/tennis/t3.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/football/f1.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/football/f2.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+with open('bbcsport/football/f1.txt') as txt:
+    strg.append(txt.read().replace('\n',' '))
+
+no_pun = []
+tokens = []
+count = []
+clean = []
+
+for i in range(9):
+    strg[i] = strg[i].lower()
+   
+    no_pun.append(strg[i].translate(None,string.punctuation));
+    tokens.append(nltk.word_tokenize(no_pun[i]))
+    count.append(Counter(w for w in tokens[i] if not w in stopwords.words('english')))
+
+for i in range(9):
+    print count[i].most_common(20)    
+
+
+
