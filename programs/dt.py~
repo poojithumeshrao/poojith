@@ -1,0 +1,20 @@
+class person:
+    def __init__(self,h,m,i):
+        self.home = h;
+        self.mar = m;
+        self.inc = i
+
+n = 10
+
+test = []
+
+test.append(person(1,0,125))
+test.append(person(0,1,100))
+test.append(person(0,0,70))
+test.append(person(1,1,120))
+test.append(person(0,2,95))
+test.append(person(0,1,60))
+test.append(person(1,2,220))
+test.append(person(0,0,85))
+test.append(person(0,1,75))
+test.append(person(0,0,90))
