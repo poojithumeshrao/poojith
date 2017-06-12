@@ -1,0 +1,13 @@
+import random
+
+
+inp = [[0,0,0],[0,1,1],[1,1,1],[1,0,1]]
+
+class hidden:
+    def __init__(self,n,i,0):
+        no_nodes = n
+        no_input = i
+        no_output = o
+        h = [0 for i in range(n)]
+        inwght = [random.random(0,1) for i in range(n*i)]
+        outwght = [random.random(0,1) for i in range(n*o)]
