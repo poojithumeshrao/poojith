@@ -1,0 +1,37 @@
+import gzip
+import cPickle
+import numpy
+
+f = gzip.open('mnist.pkl.gz')
+train_set, valid_set, test_set = cPickle.load(f)
+f.close()
+ 
+#print train_set[0][47637][323]
+
+output = [[1,0,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0],[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,1]]
+
+#f = open("optestset.p","wb")
+
+temp = []
+'''
+for items in test_set[0]:
+    t = []
+    for i in range(len(items)):
+        if items[i] > 0.0:
+            t.append(1)
+            continue
+        elif items[i] == 0 :
+            t.append(0)
+    temp.append(t)
+'''
+
+'''ot = []
+for items in test_set[1]:
+    ot.append(output[items])
+'''
+
+print output[test_set[1][0]]
+#cPickle.dump(ot,f)
+#print len(ot)
+#print temp[47637][323]
+f.close()

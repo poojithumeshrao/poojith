@@ -1,0 +1,5 @@
+import cPickle
+
+f = open("dataset.p","rb")
+a = cPickle.load(f)
+print a[47637][323]

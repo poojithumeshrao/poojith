@@ -1,10 +1,20 @@
 import random
 import pdb
 import math
+import cPickle
 
-nip = 2
-inp = [[0,0,1],[0,1,1],[1,1,1],[1,0,0]]
+nip = 784
+mnisti = cPickle.load(open("dataset.p","rb"))
+mnisto = cPickle.load(open("opdataset.p","rb"))
+inp =[]
+#inp = [[0,0,0],[0,1,1],[1,1,1],[1,0,1]]
+batch = 100
+for i in range(batch):
+    inp.append(mnisti[i] + mnisto[i])
+print "sucessfully loaded the mnist dataset....."
 
+print len(inp)
+print len(inp[0])
 def sigmoid(temp):
     #print temp
     return 1/float((1+math.exp(-temp)))
@@ -21,12 +31,15 @@ class hidden:
         self.deror = [0 for a in range(n)]
 
 layer = []
-layer.append(hidden(0,2,3))
-layer.append(hidden(2,3,1))
-layer.append(hidden(3,1,0))
+layer.append(hidden(0,784,20))
+layer.append(hidden(784,20,20))
+layer.append(hidden(20,20,20))
+layer.append(hidden(20,20,20))
+layer.append(hidden(20,20,10))
+layer.append(hidden(20,10,0))
 
-layer[0].h = [0 for i in range(2)]
-layer[0].h = [0 for i in range(2)]
+#layer[0].h = [0 for i in range(2)]
+#layer[0].h = [0 for i in range(2)]
 #layer[2].inwght = [0.3,0.2]
 #layer[1].inwght = [0.1,0.2,0.3,0.4]
 error = [0 for i in range(len(inp))]
@@ -48,9 +61,9 @@ while ercheck >  0.001:
                     t = t +(layer[j].ho[l]) * (layer[j+1].inwght[(k*layer[j+1].no_input)+l])
                 layer[j+1].h[k] = t
                 layer[j+1].ho[k] = sigmoid(t)
-        if count % 1000 == 0:
+        #if count % 1 == 0:
             #print layer[1].ho
-            print str(inp[i][2]) +'  ' +  str(layer[-1].ho[0]) + ' '# + str(layer[-1].delin) + str(layer[-1].inwght)
+            #print str(inp[i][2]) +'  ' +  str(layer[-1].ho[0]) + ' '# + str(layer[-1].delin) + str(layer[-1].inwght)
             #----------------------- backward feed ---------------------        
         #pdb.set_trace()
         er = [0 for j in range(layer[-1].no_nodes)]
@@ -87,10 +100,19 @@ while ercheck >  0.001:
     
     ercheck = max(error)
    
-    if count % 1000 == 0:
+    if batch != 50000:
+        batch += 100
+    else :
+        batch = 100
+    del(inp)
+    inp = []
+    for mb in range((batch-100),batch,1):
+        inp.append(mnisti[mb] + mnisto[mb])
+    if count % 1 == 0:
         #ercheck = 0
         print count
-        print ercheck
+        print max(er)
+        print sum(error)
         print '-----------'
     count +=1;
 print'---------'         

@@ -1,0 +1,13 @@
+import cPickle, gzip
+from data_utils import create_minibatches
+from neural_network import MLP
+
+f = gzip.open('mnist.pkl.gz')
+train_set, valid_set, test_set = cPickle.load(f)
+f.close()
+
+
+#print train_set[0][7347][486]
+
+for item in train_set[0]:
+	
