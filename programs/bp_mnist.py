@@ -38,12 +38,12 @@ class hidden:
         self.deror = [0 for a in range(n)]
 
 layer = []
-layer.append(hidden(0,49,50))
-layer.append(hidden(49,50,10))
+layer.append(hidden(0,49,500))
+layer.append(hidden(49,500,10))
 #layer.append(hidden(20,20,20))
 #layer.append(hidden(20,20,20))
 #layer.append(hidden(20,20,10))
-layer.append(hidden(50,10,0))
+layer.append(hidden(500,10,0))
 
 
 count = 0
