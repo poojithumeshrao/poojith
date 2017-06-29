@@ -1,0 +1,31 @@
+
+maskr = 7
+maskc = 7
+
+
+
+def getmat(a,b,mat):
+    retmat = numpy.zeros((maskr,maskc))
+    retmat[maskr/2,maskc/2] = mat[a,b]
+    c = a
+    d = b
+    i = maskr/2
+    j = maskc/2
+    while c >= 0 and i >= 0:
+        retmat[i][j] = mat[c][d]
+        while d>=0 and j>=0:
+            retmat[i][j] = mat[c][d]
+            d-=1
+            j-=1
+        c -= 1
+        i -= 1
+    while c < maskr and i < len(mat):
+        retmat[i][j] = mat[c][d]
+        while d<maskc and j<len(mat[0]):
+            retmat[i][j] = mat[c][d]
+            d+=1
+            j+=1
+        c += 1
+        i += 1
+        
+    

@@ -1,0 +1,43 @@
+import sklearn.datasets as dataset
+import numpy
+import pdb
+
+a = dataset.load_boston()
+
+inp = numpy.asarray(a.data)
+op = numpy.asarray(a.target)
+
+print inp.shape
+print op.shape
+
+#weight = numpy.random.uniform(-0.1,0.1,size = (len(inp),1+len(inp[0])))
+#delta = numpy.random.uniform(-1,1,size = (len(inp),1+len(inp[0])))
+weight = numpy.zeros((len(inp),1+len(inp[0])))
+delta = numpy.zeros((len(inp),1+len(inp[0])))
+error = numpy.zeros((506,1))
+gop = numpy.zeros((op.shape))
+
+
+def linreg():
+    #pdb.set_trace()
+    for i in range(len(inp)):
+        temp = float(weight[i][0])
+        for j in range(len(inp[i])):
+            temp+=inp[i][j]*weight[i][j+1]
+        gop[i]=temp
+        error[i] = op[i]-gop[i]
+    #pdb.set_trace()
+    erj = numpy.sum(error**2) /2
+    print len(error)
+    for i in range(len(inp)):
+        delta[i][0] = error[i]
+        for j in range(len(inp[i])):
+            delta[i][j+1] = error[i]*inp[i][j]
+        weight[i]+=0.000001*delta[i]
+        #weight[i]+=0.0000029787*delta[i]
+        #print error[i]
+    #pdb.set_trace()
+    #print weight[0]
+    print erj
+while True:
+    linreg()
