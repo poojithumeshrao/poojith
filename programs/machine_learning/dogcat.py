@@ -26,16 +26,9 @@ cop = []
 #inp = numpy.array([[0,0],[0,1],[1,1],[1,0]])
 #op = numpy.array([[0],[1],[1],[1]])
 counthist = 0
-'''
-mnisti = cPickle.load(open("dataset.p","rb"))
+
 mnisto = cPickle.load(open("opdataset.p","rb"))
-mnistti = cPickle.load(open("intestset.p","rb"))
-mnistto = cPickle.load(open("optestset.p","rb"))
-'''
-mnisto = cPickle.load(open("opdataset.p","rb"))
-mnistto = cPickle.load(open("optestset.p","rb"))
-f=gzip.open('mnist.pkl.gz')
-train_set,valid_set,test_set = cPickle.load(f)
+
 nip = 100
 for i in range(nip):
     cin.append(train_set[0][i])

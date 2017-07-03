@@ -12,9 +12,11 @@ import gzip
 import skimage.measure
 import scipy.ndimage
 import scipy.signal
+import gc
+import sys
 
 def oz(x):
-    if x>0.3:
+    if x>0.5:
         return 1
     else :
         return 0
@@ -32,17 +34,25 @@ mnisto = cPickle.load(open("opdataset.p","rb"))
 mnistti = cPickle.load(open("intestset.p","rb"))
 mnistto = cPickle.load(open("optestset.p","rb"))
 '''
-mnisto = cPickle.load(open("opdataset.p","rb"))
-mnistto = cPickle.load(open("optestset.p","rb"))
-f=gzip.open('mnist.pkl.gz')
-train_set,valid_set,test_set = cPickle.load(f)
+
+#a = numpy.load('/home/poojith/dcin',mmap_mode = 'r')
+
+#train_set = a['arr_0']
+train_set=numpy.load('/home/poojith/dct',mmap_mode = 'r')
+#mnisto = a['arr_1']
+mnisto = numpy.load('/home/poojith/dco',mmap_mode = 'r')
+
+#mnisto = [0 for i in range(12500)]+[1 for i in range(12500)]
+#pdb.set_trace()
 nip = 100
 for i in range(nip):
-    cin.append(train_set[0][i])
+    cin.append(train_set[i])
     cop.append(mnisto[i])
 cin = numpy.asarray(cin)
 cop = numpy.asarray(cop)
+print 'loaded data successfully'
 
+#pdb.set_trace()
 
 def csig(x):
     return 1/float((1+math.exp(-x)))
@@ -68,7 +78,7 @@ class hidden:
         self.ho = numpy.zeros((h,n))
         self.delta = self.ho
         self.der = self.delta
-        self.inwght = numpy.random.uniform(low = -0.5,high = 0.5,size =(i,n))
+        self.inwght = numpy.random.uniform(low = -1,high = 1,size =(i,n))
         self.inwghttrans = self.inwght.transpose()
         self.deltatrans = self.delta.transpose()
         self.hotrans = self.ho.transpose()
@@ -81,22 +91,22 @@ class conv:
     def __init__(self,r,c,m):
         self.row = r
         self.col = c
-        self.mask = numpy.random.uniform(-0.5,0.5,size=(depth,nip,mr,mc))
+        self.mask = numpy.random.uniform(-1,1,size=(depth,nip,mr,mc))
         a,b,c = m[0].shape
-        self.deltam = numpy.zeros((depth,a,b,c))
+        self.deltam = numpy.empty((depth,a,b,c))
         self.mat = m
-        self.conv = numpy.zeros((depth,nip,r-mr+1,c-mc+1))
-        self.relu = numpy.zeros((depth,nip,r-mr+1,c-mc+1))
-        self.deltac = numpy.zeros((depth,nip,r-mr+1,c-mc+1))
+        self.conv = numpy.empty((depth,nip,r-mr+1,c-mc+1))
+        self.relu = numpy.empty((depth,nip,r-mr+1,c-mc+1))
+        self.deltac = numpy.empty((depth,nip,r-mr+1,c-mc+1))
         if (r-mr+1)%2 == 0 :
-            self.pool = numpy.zeros((depth,nip,(r-mr+1)/2,(c-mc+1)/2))
+            self.pool = numpy.empty((depth,nip,(r-mr+1)/2,(c-mc+1)/2))
         else :
-            self.pool = numpy.zeros((depth,nip,((r-mr+1)/2)+1,((c-mc+1)/2)+1))
-        self.delta = numpy.zeros((self.pool.shape))
-        self.delma =numpy.zeros((depth,nip,mr,mc))
-        self.der =numpy.zeros((depth,nip,mr,mc))
+            self.pool = numpy.empty((depth,nip,((r-mr+1)/2)+1,((c-mc+1)/2)+1))
+        self.delta = numpy.empty((self.pool.shape))
+        self.delma =numpy.empty((depth,nip,mr,mc))
+        self.der =numpy.empty((depth,nip,mr,mc))
 layer = []
-hid = [500,50]
+hid = [1000,700]
 def create_layers(numex,inp,out):
     global hid
     layer.append(hidden(0,inp,hid[0],numex))
@@ -119,8 +129,7 @@ def create_layers(numex,inp,out):
 def backpropagation(layer):
     check = 1
     count = 1
-    plotx = []
-    ploty = []
+    
     while count < 2 :
         #----------------forwardfeed------------------
         layer[0].ho = layer[0].h = inp
@@ -133,82 +142,94 @@ def backpropagation(layer):
         #---------backwardfeed---------------
         one = numpy.ones(layer[-1].ho.shape)
         layer[-1].delta=numpy.subtract(op,layer[-1].ho)*layer[-1].ho*(numpy.subtract(one,layer[-1].ho))
-        layer[-1].delta *= 0.01
+        del one
+        layer[-1].delta *= 0.001
         error = numpy.square(numpy.subtract(op,layer[-1].ho))*0.5
         check = numpy.mean(error)
+        #pdb.set_trace()
         for i in range(len(layer)-2,-1,-1):
             layer[i+1].deltatrans = layer[i+1].delta.transpose()
             layer[i+1].hotrans = layer[i+1].ho.transpose()
             layer[i].delta = numpy.dot(layer[i+1].inwght,layer[i+1].deltatrans).transpose()
-            layer[i].delta *= layer[i].der*0.01
+            layer[i].delta *= layer[i].der*0.001
             layer[i+1].delin = numpy.dot(layer[i].ho.transpose(),layer[i+1].delta)
             layer[i+1].inwght += (layer[i+1].delin + layer[i+1].momentum)
+            layer[i+1].momentum = layer[i+1].delin
         count += 1
     return check
 
-
+#pdb.set_trace()
+'''
 cinp = []
 for i in range(len(cin)):
-    cinp.append(cin[i].reshape((28,28)))
+    cinp.append(cin[i].reshape((256,256)))
     for j in range(28):
         for k in range(28):
             cinp[i][j][k] = (cinp[i][j][k])
 cinp = numpy.asarray(cinp)
-
+'''
 
 mr = 3
 mc = 3
 pf = 2
-nr,nc = cinp[0].shape
+nr,nc = cin[0].shape
 r = nr
-inc  = copy.deepcopy(cinp)
-depth = 20
+inc  = copy.deepcopy(cin)
+depth = 5
 convlayer = []
 incc = []
 for i in range(depth):
     incc.append(inc)
 convlayer.append(conv(nr,nc,incc))
 cl = 0
-while nr>6 and nc > 6:
-    opc = numpy.zeros((depth,nip,nr-mr+1,nc-mc+1))
+while nr>50 and nc > 50:
+    #opc = numpy.zeros((depth,nip,nr-mr+1,nc-mc+1))
 
     #pdb.set_trace()
     incc = []
     for dpt in range(depth):
+        #pdb.set_trace()
         for tc in range(nip):
-            opc[dpt][tc] = scipy.signal.convolve2d(convlayer[cl].mat[dpt][tc],convlayer[cl].mask[dpt][tc],mode='valid')
-            convlayer[cl].relu[dpt][tc] = numpy.maximum(opc[dpt][tc],0)
-            convlayer[cl].conv[dpt][tc] = opc[dpt][tc]
+            temp = scipy.signal.convolve2d(convlayer[cl].mat[dpt][tc],convlayer[cl].mask[dpt][tc],mode='valid')
+            convlayer[cl].relu[dpt][tc] = numpy.maximum(temp,0)
+            convlayer[cl].conv[dpt][tc] = temp
             convlayer[cl].pool[dpt][tc]=skimage.measure.block_reduce(convlayer[cl].relu[dpt][tc],(2,2),numpy.mean)
+            del temp
+        #pdb.set_trace()
         nr,nc = convlayer[cl].pool[dpt][0].shape
-        inc = copy.deepcopy(convlayer[cl].pool[dpt])
-        incc.append(inc)
+        incc.append(copy.deepcopy(convlayer[cl].pool[dpt]))
+        
     convlayer.append(conv(nr,nc,incc))
+    del(incc)
     cl+=1
 
 #pdb.set_trace()
 print nip
 inp = numpy.zeros((nip,depth*(convlayer[-2].pool[0].shape[1])*(convlayer[-2].pool[0].shape[2])))
 
-
 count = 0
-create_layers(nip*depth,len(inp[0]),10)
+create_layers(nip*depth,len(inp[0]),1)
 op = copy.deepcopy(cop)
 while True:
-    batch = 100
+    batch = 00
     error = 100
+    del(cin)
+    del(cop)
     cin = []
     cop = []
     for i in range(nip):
-        cin.append(train_set[0][i])
+        cin.append(train_set[i])
         cop.append(mnisto[i])
     cin = numpy.asarray(cin)
     cop = numpy.asarray(cop)
-    op = copy.deepcopy(cop)
-    while batch<20000:
-        nr,nc = cinp[0].shape
+    op = cop
+    op = op.reshape(len(inp),-1)
+    #pdb.set_trace()
+    while batch<200:
+        nr,nc = cin[0].shape
         for cl in range(len(convlayer)):
             for dpt in range(depth):
+                #pdb.set_trace()
                 opc = numpy.zeros((depth,nip,nr-mr+1,nc-mc+1))
                 for tc in range(nip):
                     #pdb.set_trace()
@@ -219,10 +240,12 @@ while True:
                     convlayer[cl].pool[dpt][tc]=skimage.measure.block_reduce(convlayer[cl].relu[dpt][tc],(2,2),numpy.max)
                     if cl != len(convlayer)-1 :
                         convlayer[cl+1].mat[dpt][tc]=convlayer[cl].pool[dpt][tc]
+                del opc
             nr,nc = convlayer[cl].pool[dpt][0].shape
             #pdb.set_trace()
             #func = numpy.vectorize(oz)
         for i in range(nip):
+            del inc 
             inc=[]
             for j in range(depth):
                 inc.append(convlayer[-1].mat[j][i].flatten())
@@ -252,12 +275,14 @@ while True:
                         temp2 = numpy.delete(temp2,-1,axis=0)
                         temp2 = numpy.delete(temp2,-1,axis=1)
                     #pdb.set_trace()
-                    convlayer[cl].deltac[dpt][i] = temp2*(temp1 == convlayer[cl].relu[dpt][i])*1
+                    convlayer[cl].deltac[dpt][i] = temp2*(temp1 == convlayer[cl].relu[dpt][i])*2
                     #convlayer[cl].deltam[i] = scipy.signal.convolve2d(convlayer[cl].deltac[i],(convlayer[cl].mask[i]),mode='full')
                     convlayer[cl].deltam[dpt][i] = scipy.signal.convolve2d(convlayer[cl].deltac[dpt][i],numpy.flip(numpy.flip(convlayer[cl].mask[dpt][i],0),1),mode='full')
                     #convlayer[cl].delma[dpt][i] = scipy.signal.convolve2d(convlayer[cl].mat[dpt][i],(convlayer[cl].deltac[dpt][i]),mode='valid')
                     convlayer[cl].delma[dpt][i] = scipy.signal.convolve2d(numpy.flip(numpy.flip(convlayer[cl].deltac[dpt][i],0),1),(convlayer[cl].mat[dpt][i]),mode='valid')
                     convlayer[cl].mask[dpt][i] += convlayer[cl].delma[dpt][i]
+                    del temp1
+                    del temp2
         if batch != 50000:
             batch += 100
         else :
@@ -266,38 +291,45 @@ while True:
         del(cop)
         cin = []
         cop = []
-        for i in range(batch,batch+100,1):
-            cin.append(train_set[0][i])
+        for i in range(batch-1,batch+99,1):
+            cin.append(train_set[i])
             cop.append(mnisto[i])
         cin = numpy.asarray(cin)
         cop = numpy.asarray(cop)
-        op = copy.deepcopy(cop)
-        #print error
-        #print batch
+        op = cop
+        op = op.reshape(len(inp),-1)
+        print error
+        print batch
         #print convlayer[1].mask[0][0]
         #print convlayer[1].mask[1][0]
         #print convlayer[1].mask[2][0]
-        #print layer[-1].ho[1]
-        #print op[1]
-        #print layer[-1].ho[99]
-        #print op[99]
+        a = random.randint(0,99)
+        print layer[-1].ho[a]
+        print op[a]
+        #a = random.randint(0,99)
+        #print layer[-1].ho[a]
+        #print op[a]
         #pdb.set_trace()
-    print error
     #print count
-        
-    cin=[]
-    cop=[]
-    for i in range(nip):
-        cin.append(test_set[0][i])
-        cop.append(mnistto[i])
-    cin = numpy.asarray(cin)
-    cop = numpy.asarray(cop)
-    op = copy.deepcopy(cop)
-    nr,nc = cinp[0].shape
+    #count+=1
+    
+    #print count
+    #del(cin)
+    #del(cop)
+    #cin=[]
+    #cop=[]
+    #for i in range(nip):
+    #    cin.append(test_set[0][i])
+    #    cop.append(mnistto[i])
+    #cin = numpy.asarray(cin)
+    #cop = numpy.asarray(cop)
+    #op = copy.deepcopy(cop)
+    nr,nc = cin[0].shape
     batch = 0
     summm = 0.0
-    while batch<5000:
-        nr,nc = cinp[0].shape
+    summmm = 0.0
+    while batch<200:
+        nr,nc = cin[0].shape
         for cl in range(len(convlayer)):
             for dpt in range(depth):
                 opc = numpy.zeros((depth,nip,nr-mr+1,nc-mc+1))
@@ -316,8 +348,9 @@ while True:
         error = backpropagation(layer)
     
         func = numpy.vectorize(oz)
-        #trueop = func(layer[-1].ho)
-        trueop = copy.deepcopy(layer[-1].ho)
+        trueop = func(layer[-1].ho)
+        #trueop = copy.deepcopy(layer[-1].ho)
+        '''
         for i in range(len(trueop)):
             m = max(trueop[i])
             for j in range(len(trueop[i])):
@@ -325,18 +358,21 @@ while True:
                     trueop[i][j]=1
                 else :
                     trueop[i][j] = 0
+        '''
         for i in range(len(op)):
-            summm += 1*(numpy.all(trueop[i]==op[i]))       
+            summm += 1*(numpy.all(trueop[i]==op[i]))
+            summmm +=1
         if batch != 10000:
             batch += 100
         else :
             batch = 100
         del(cin)
         del(cop)
+        del(op)
         cin = []
         cop = []
-        for i in range(batch,batch+100,1):
-            cin.append(train_set[0][i])
+        for i in range(batch-1,batch+99,1):
+            cin.append(train_set[i])
             cop.append(mnisto[i])
         cin = numpy.asarray(cin)
         cop = numpy.asarray(cop)
@@ -344,7 +380,16 @@ while True:
         #print error
         #print batch
     print count
-    print summm/5000.0
+    print summm/summmm
     print '---------------------------'
     count += 1
     #pdb.set_trace()
+    
+'''
+f = open("conv.p","wr")
+cPickle.dump(convlayer,f)
+f.close()
+f= open("layer.p","wr")
+cPickle.dump(convlayer,f)
+f.close()
+'''
