@@ -1,0 +1,23 @@
+import tensorflow as tf
+import pdb
+
+x = tf.placeholder(dtype=tf.float32)
+y = tf.placeholder(dtype=tf.float32)
+
+xt = [1,2,3,4,5]
+yt = [5,4,3,2,1]
+
+w = tf.Variable([0.1],dtype=tf.float64)
+b = tf.Variable([0.1],dtype=tf.float64)
+
+lin = w*x + b
+
+init = tf.global_variable_initializer()
+sess = tf.Session()
+
+sess.run(init)
+print sess.run(w,b)
+
+
+loss = tf.reduce_sum(tf.square(lin-y))
+

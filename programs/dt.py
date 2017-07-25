@@ -1,4 +1,7 @@
+from __future__ import division
+
 import graphviz as gv
+import pdb
 
 g1 = gv.Graph(format='svg')
 class person:
@@ -52,7 +55,7 @@ status =[0 for i in range(ntc)]
 
 #function to find the best split condition of the input train
 def best_test_cond(train):
-    gini = []
+    gini = [0 for i in range(n)]
     nxt = [0 for i in range(n)]
     for i in range(ntc):
         gini.append(0)
@@ -61,7 +64,7 @@ def best_test_cond(train):
             uniq = set(temp)
             uniq = list(uniq)
             uniq.sort()
-            diff = 0
+            diff = 00
             r = 0
             if len(uniq) > 1 :
                 for j in range(len(uniq)-1):
@@ -96,16 +99,19 @@ def best_test_cond(train):
                         else :
                             print 'error'
                     ###########################################################
-                    ginic1 = 1 - (c1g**2 + (len(chunk1)-c1g)**2)/(len(chunk1)**2)#gini of chunk1
-                    ginic2 = 1 - (c2g**2 + (len(chunk2)-c2g)**2)/(len(chunk2)**2)#gini of chunk2
-                    ginit = 1 - (tg**2 + (len(temp)-tg)**2)/(len(temp)**2)#gini of main
-                    gini12 = (len(chunk1)*ginic1 + len(chunk2)*ginic2)/len(temp)
+                    ginic1 = 1 - (c1g**2 + (c1-c1g)**2)/(c1**2)#gini of chunk1
+                    ginic2 = 1 - (c2g**2 + (c2-c2g)**2)/(c2**2)#gini of chunk2
+                    ginit = 1 - (tg**2 + (len(train)-tg)**2)/(len(train)**2)#gini of main
+                    gini12 = (c1*ginic1 + c2*ginic2)/len(train)
                     if diff < (ginit-gini12):
                         diff = ginit - gini12
+                        #pdb.set_trace()
                         r = j
-                nxt[i] = j
+                    #pdb.set_trace()
+                nxt[i] = r
                 gini[i] = diff
     retgini = max(gini)
+    #pdb.set_trace()
     retcond = gini.index(retgini)
     condchunk = nxt[retcond]
     retlist = []
@@ -133,10 +139,10 @@ def string(zzz,ppp):
     b.append(['single','married','divorced'])
     b.append(['60','70','75','85','90','95','100','120','125','220'])
     if zzz[0] != -1:
-        s =   ' ' + str(b[zzz[0]][zzz[1]]) +'  ' +  str(a[zzz[0]]) +'  '+  str(b[zzz[0]][zzz[1]+1])
+        s =  ' ' + str(b[zzz[0]][zzz[1]]) +'  ' +  str(a[zzz[0]]) +'  '+  str(b[zzz[0]][zzz[1]+1])
     else :
-        s = ppp
-    von += 1
+	#pdb.set_trace()
+        s = str(ppp)  
     return s
 #function to return the stopping condition of the decision tree
 
@@ -174,10 +180,11 @@ for i in range(len(train_set)):
 first.best_label()
 first_cond = best_test_cond(first.lst)
 first.cond = first_cond
-g1.node(string(first.cond,first.label))
+g1.node(string(first.cond,first.label) +str(0))
 
 
 def treegrowth(nod):
+    oio = 1
     nod.best_label()
     if stop_cond(nod):
         nod.cond = [-1,-1]
@@ -210,10 +217,11 @@ def treegrowth(nod):
         child1.best_label();
         child2.best_label();
         nod.best_label();
-        g1.node(string(child2.cond,child2.label))
-        g1.node(string(child1.cond,child1.label))
-        g1.edge(string(nod.cond,nod.label),string(child1.cond,child1.label),color = 'red')
-        g1.edge(string(nod.cond,nod.label),string(child2.cond,child2.label),color = 'green')
+        g1.node(string(child2.cond,child2.label) +str(oio))
+        g1.node(string(child1.cond,child1.label)+str(oio))
+        g1.edge(string(nod.cond,nod.label)+str(oio-1),string(child1.cond,child1.label)+str(oio),color = 'red')
+        g1.edge(string(nod.cond,nod.label)+str(oio-1),string(child2.cond,child2.label)+str(oio),color = 'green')
+	oio+=1
         ''' 
         for x in nod.lst:
         print x.ids 
@@ -231,4 +239,4 @@ g1.node('b')
 g1.edge('a','b')
 '''
 g1.render(filename = 'img/g1')
-
+pdb.set_trace()

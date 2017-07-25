@@ -1,31 +1,27 @@
 graph {
-	" no  home owner  yes0"
-	give0
-	"dont give0"
-		" single  marital status  married0" -- "dont give0" [color=red]
-		" single  marital status  married0" -- give0 [color=green]
-	give0
-	" single  marital status  married0"
-		" no  home owner  yes0" -- " single  marital status  married0" [color=red]
-		" no  home owner  yes0" -- give0 [color=green]
-	" no  home owner  yes1"
+	" 95  salary  1000"
+	give1
+	"dont give1"
+		" 60  salary  700" -- "dont give1" [color=red]
+		" 60  salary  700" -- give1 [color=green]
+	give1
+	" 60  salary  701"
+		" single  marital status  married0" -- " 60  salary  701" [color=red]
+		" single  marital status  married0" -- give1 [color=green]
 	"dont give1"
 	give1
-		" single  marital status  married1" -- give1 [color=red]
-		" single  marital status  married1" -- "dont give1" [color=green]
-	give1
+		" single  marital status  married0" -- give1 [color=red]
+		" single  marital status  married0" -- "dont give1" [color=green]
 	" single  marital status  married1"
-		" no  home owner  yes1" -- " single  marital status  married1" [color=red]
-		" no  home owner  yes1" -- give1 [color=green]
-	" single  marital status  married2"
-	give2
-	"dont give2"
-		" single  marital status  married2" -- "dont give2" [color=red]
-		" single  marital status  married2" -- give2 [color=green]
-	" no  home owner  yes3"
-	give3
-	"dont give3"
-		" no  home owner  yes3" -- "dont give3" [color=red]
-		" no  home owner  yes3" -- give3 [color=green]
-	" no  home owner  yes4"
+	"dont give1"
+		" 60  salary  700" -- "dont give1" [color=red]
+		" 60  salary  700" -- " single  marital status  married1" [color=green]
+	give1
+	" 60  salary  701"
+		" no  home owner  yes0" -- " 60  salary  701" [color=red]
+		" no  home owner  yes0" -- give1 [color=green]
+	" no  home owner  yes1"
+	" single  marital status  married1"
+		" 95  salary  1000" -- " single  marital status  married1" [color=red]
+		" 95  salary  1000" -- " no  home owner  yes1" [color=green]
 }
