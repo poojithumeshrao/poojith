@@ -1,27 +1,20 @@
 graph {
-	" 95  salary  1000"
-	give1
-	"dont give1"
-		" 60  salary  700" -- "dont give1" [color=red]
-		" 60  salary  700" -- give1 [color=green]
-	give1
-	" 60  salary  701"
-		" single  marital status  married0" -- " 60  salary  701" [color=red]
-		" single  marital status  married0" -- give1 [color=green]
-	"dont give1"
-	give1
-		" single  marital status  married0" -- give1 [color=red]
-		" single  marital status  married0" -- "dont give1" [color=green]
-	" single  marital status  married1"
-	"dont give1"
-		" 60  salary  700" -- "dont give1" [color=red]
-		" 60  salary  700" -- " single  marital status  married1" [color=green]
-	give1
-	" 60  salary  701"
-		" no  home owner  yes0" -- " 60  salary  701" [color=red]
-		" no  home owner  yes0" -- give1 [color=green]
-	" no  home owner  yes1"
-	" single  marital status  married1"
-		" 95  salary  1000" -- " single  marital status  married1" [color=red]
-		" 95  salary  1000" -- " no  home owner  yes1" [color=green]
+	"1[-44 -27  17]"
+		"0[-19 -31 -10]" -- "1[-44 -27  17]" [label=left]
+	"2[-28  -9 -33]"
+		"1[-44 -27  17]" -- "2[-28  -9 -33]" [label=right]
+	"0[-25  19  32]"
+		"2[-28  -9 -33]" -- "0[-25  19  32]" [label=right]
+	"1[-29  -1  41]"
+		"0[-25  19  32]" -- "1[-29  -1  41]" [label=left]
+	"1[ 14 -22  22]"
+		"0[-19 -31 -10]" -- "1[ 14 -22  22]" [label=right]
+	"2[ 19 -38 -17]"
+		"1[ 14 -22  22]" -- "2[ 19 -38 -17]" [label=left]
+	"0[ 24 -22 -40]"
+		"2[ 19 -38 -17]" -- "0[ 24 -22 -40]" [label=left]
+	"2[ 35   4 -16]"
+		"1[ 14 -22  22]" -- "2[ 35   4 -16]" [label=right]
+	"0[47 14 14]"
+		"2[ 35   4 -16]" -- "0[47 14 14]" [label=right]
 }
